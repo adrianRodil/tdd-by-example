@@ -34,4 +34,38 @@ public class MoneyTest {
     Assertions.assertNotEquals(Money.dollar(1).currency(), Money.franc(1).currency());
   }
 
+  @Test
+  void testSimpleAddition() {
+    Money five = Money.dollar(5);
+    Expression sum = five.plus(five);
+    Bank bank = new Bank();
+
+    Money reduced = bank.reduce(sum, "USD");
+    Assertions.assertEquals(Money.dollar(10), reduced);
+  }
+
+  @Test
+  void testPlusReturnsSum() {
+    Money five = Money.dollar(5);
+    Expression result = five.plus(five);
+    Sum sum = (Sum) result;
+    Assertions.assertEquals(five, sum.augmend);
+    Assertions.assertEquals(five, sum.addmend);
+  }
+
+  @Test
+  void testReduceSum() {
+    Expression sum = new Sum(Money.dollar(3), Money.dollar(4));
+    Bank bank = new Bank();
+    Money result = bank.reduce(sum, "USD");
+    Assertions.assertEquals(Money.dollar(7), result);
+  }
+
+  @Test
+  void testReduceMoney() {
+    Bank bank = new Bank();
+    Money result = bank.reduce(Money.dollar(1), "USD");
+    Assertions.assertEquals(Money.dollar(1), result);
+  }
+
 }
